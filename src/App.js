@@ -7,6 +7,7 @@ import { useState } from "react";
 
 export default function App() {
   const [item, setItem] = useState([]);
+
   function handleAtItems(item) {
     setItem((items) => [...items, item]);
   }
@@ -23,6 +24,13 @@ export default function App() {
     );
   }
 
+  function clearList() {
+    const confirmed = window.confirm(
+      "Are you sure you wanna delete all the items?"
+    );
+    if (confirmed) setItem([]);
+  }
+
   return (
     <div className="app">
       <Logo />
@@ -31,6 +39,7 @@ export default function App() {
         item={item}
         onDeleteItem={handleDeleteItem}
         onToogle={toogleItem}
+        onClear={clearList}
       />
       <Stats item={item} />
     </div>
@@ -82,7 +91,7 @@ function Form({ onAddItems }) {
   );
 }
 
-function PacakagingList({ item, onDeleteItem, onToogle }) {
+function PacakagingList({ item, onDeleteItem, onToogle, onClear }) {
   const [sortBy, setSortBy] = useState("input");
   let sortedItem;
 
@@ -115,6 +124,10 @@ function PacakagingList({ item, onDeleteItem, onToogle }) {
           <option value="description">Sort by description</option>
           <option value="packed">Sort by packed status</option>
         </select>
+
+        {item.length === 0 ? null : (
+          <button onClick={onClear}>Clear list</button>
+        )}
       </div>
     </div>
   );
